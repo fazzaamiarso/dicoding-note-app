@@ -2,7 +2,7 @@ import NotesCard from "../components/NotesCard";
 import { useNotesData } from "../utils/notes-context";
 
 const ArchivedNotes = () => {
-  const notes = useNotesData();
+  const { notes } = useNotesData();
 
   const archivedNotes = notes.filter((note) => note.archived);
 

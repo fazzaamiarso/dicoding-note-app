@@ -1,8 +1,17 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { getInitialData, Note } from "./data";
 
 type NotesCtx = {
   notes: Note[];
+  searchedTitle: string;
+  updateSearchedTitle: (searchValue: string) => void;
   createNote: (title: string, body: string) => void;
   toggleArchive: (id: number) => void;
   deleteNote: (id: number) => void;
@@ -11,6 +20,17 @@ const notesContext = createContext<NotesCtx | undefined>(undefined);
 
 const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [notes, setNotes] = useState(() => getInitialData());
+  const [searchedTitle, setSearchedTitle] = useState("");
+
+  const updateSearchedTitle = (searchValue: string) =>
+    setSearchedTitle(searchValue);
+
+  const searchedNotes =
+    searchedTitle.length === 0
+      ? notes
+      : notes.filter((note) =>
+          note.title.toLowerCase().includes(searchedTitle.trim().toLowerCase())
+        );
 
   const deleteNote = (id: number) =>
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
@@ -40,10 +60,12 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
   return (
     <notesContext.Provider
       value={{
-        notes,
+        notes: searchedNotes,
         deleteNote,
         toggleArchive,
         createNote,
+        searchedTitle,
+        updateSearchedTitle,
       }}
     >
       {children}
@@ -57,10 +79,14 @@ const useNotes = () => {
   return ctx;
 };
 
-const useNotesData = () => useNotes().notes;
+const useNotesData = () => {
+  const { notes, searchedTitle } = useNotes();
+  return { notes, searchedTitle };
+};
 const useNotesAction = () => {
-  const { toggleArchive, deleteNote, createNote } = useNotes();
-  return { toggleArchive, deleteNote, createNote };
+  const { toggleArchive, deleteNote, createNote, updateSearchedTitle } =
+    useNotes();
+  return { toggleArchive, deleteNote, createNote, updateSearchedTitle };
 };
 
 export { NotesProvider, useNotesAction, useNotesData };

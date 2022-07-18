@@ -1,34 +1,23 @@
-import { useState } from "react";
 import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
-import { getInitialData, Note } from "./utils/data";
+import { useNotesAction, useNotesData } from "./utils/notes-context";
 
 function App() {
   const location = useLocation();
-  const [notes, setNotes] = useState(() => getInitialData());
-
-  const [searchedTitle, setSearchedTitle] = useState("");
-
-  const searchedNotes =
-    searchedTitle.length === 0
-      ? notes
-      : notes.filter((note) =>
-          note.title.toLowerCase().includes(searchedTitle.trim().toLowerCase())
-        );
+  const { searchedTitle } = useNotesData();
+  const { updateSearchedTitle } = useNotesAction();
 
   return (
     <>
       <header>
         <h1 className="bg-red-500">FZ's Notes</h1>
-        <form>
-          <input
-            type="search"
-            name="search-title"
-            id="search-title"
-            value={searchedTitle}
-            onChange={(e) => setSearchedTitle(e.target.value)}
-            placeholder="search something"
-          />
-        </form>
+        <input
+          type="search"
+          name="search-title"
+          id="search-title"
+          value={searchedTitle}
+          onChange={(e) => updateSearchedTitle(e.target.value)}
+          placeholder="search something"
+        />
         <Link
           className="text-blue-500"
           to="/new"
