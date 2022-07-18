@@ -1,11 +1,11 @@
 import { Note, showFormattedDate } from "../utils/data";
+import { useNotesAction } from "../utils/notes-context";
 
 type Props = {
   note: Note;
-  onToggleArchive: (id: number) => void;
-  onDeleteNote: (id: number) => void;
 };
-const NotesCard = ({ note, onDeleteNote, onToggleArchive }: Props) => {
+const NotesCard = ({ note }: Props) => {
+  const { toggleArchive, deleteNote } = useNotesAction();
   const isArchived = note.archived;
   return (
     <li>
@@ -15,13 +15,13 @@ const NotesCard = ({ note, onDeleteNote, onToggleArchive }: Props) => {
       <div>
         <div>
           <button
-            onClick={() => onDeleteNote(note.id)}
+            onClick={() => deleteNote(note.id)}
             className="p-2 hover:opacity-90 bg-red-400 text-white"
           >
             delete
           </button>
           <button
-            onClick={() => onToggleArchive(note.id)}
+            onClick={() => toggleArchive(note.id)}
             className="p-2 hover:opacity-90 bg-green-400 text-black"
           >
             {isArchived ? "Un-archived" : "Archive"}

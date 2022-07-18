@@ -1,23 +1,12 @@
-import { FormEvent, useState } from "react";
-import { Outlet, useOutletContext } from "react-router-dom";
-import { getInitialData, Note, showFormattedDate } from "./utils/data";
-
-type NotesContext = {
-  notes: Note[];
-  onDeleteNote: (id: number) => void;
-  onToggleArchive: (id: number) => void;
-};
-
-const TITLE_MAX_LENGTH = 10;
+import { useState } from "react";
+import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
+import { getInitialData, Note } from "./utils/data";
 
 function App() {
+  const location = useLocation();
   const [notes, setNotes] = useState(() => getInitialData());
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [searchedTitle, setSearchedTitle] = useState("");
 
-  const titleCharCount = title.length;
-  const titleCharLeft = TITLE_MAX_LENGTH - titleCharCount;
+  const [searchedTitle, setSearchedTitle] = useState("");
 
   const searchedNotes =
     searchedTitle.length === 0
@@ -26,38 +15,10 @@ function App() {
           note.title.toLowerCase().includes(searchedTitle.trim().toLowerCase())
         );
 
-  const deleteNote = (id: number) =>
-    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
-
-  const toggleArchive = (id: number) => {
-    const updatedNoteIdx = notes.findIndex((note) => note.id === id);
-    const copiedNotes = [...notes];
-    let updatedNote = copiedNotes[updatedNoteIdx];
-    if (!updatedNote) return;
-    copiedNotes[updatedNoteIdx] = {
-      ...updatedNote,
-      archived: !updatedNote.archived,
-    };
-    setNotes(copiedNotes);
-  };
-  const createNote = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const newNote: Note = {
-      title,
-      body,
-      createdAt: new Date().toString(),
-      archived: false,
-      id: Date.now(),
-    };
-    setNotes((prevNotes) => [...prevNotes, newNote]);
-    setTitle("");
-    setBody("");
-  };
-
   return (
     <>
       <header>
-        <h1 className="bg-red-500">Hello Vite Dicoding</h1>
+        <h1 className="bg-red-500">FZ's Notes</h1>
         <form>
           <input
             type="search"
@@ -68,47 +29,19 @@ function App() {
             placeholder="search something"
           />
         </form>
+        <Link
+          className="text-blue-500"
+          to="/new"
+          state={{ backgroundLocation: location }}
+        >
+          New Note
+        </Link>
       </header>
       <main>
-        {/* <form onSubmit={createNote}>
-          <label htmlFor="title">
-            <input
-              type="text"
-              value={title}
-              name="title"
-              onChange={(e) => {
-                const canChange = e.target.value.length <= TITLE_MAX_LENGTH;
-                canChange && setTitle(e.target.value);
-              }}
-              placeholder="title"
-            />
-            {titleCharLeft} characters left
-          </label>
-          <label htmlFor="body">
-            <input
-              type="text"
-              value={body}
-              name="body"
-              onChange={(e) => setBody(e.target.value)}
-              placeholder="body"
-            />
-          </label>
-          <button type="submit">New Post</button>
-        </form> */}
-        <Outlet
-          context={{
-            onDeleteNote: deleteNote,
-            onToggleArchive: toggleArchive,
-            notes: searchedNotes,
-          }}
-        />
+        <Outlet />
       </main>
     </>
   );
 }
 
 export default App;
-
-export const useNotes = () => {
-  return useOutletContext<NotesContext>();
-};
