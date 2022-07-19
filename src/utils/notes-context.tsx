@@ -40,10 +40,11 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
     const copiedNotes = [...notes];
     let updatedNote = copiedNotes[updatedNoteIdx];
     if (!updatedNote) return;
-    copiedNotes[updatedNoteIdx] = {
-      ...updatedNote,
-      archived: !updatedNote.archived,
-    };
+    // copiedNotes[updatedNoteIdx] = {
+    //   ...updatedNote,
+    //   archived: !updatedNote.archived,
+    // };
+    updatedNote.archived = !updatedNote.archived;
     setNotes(copiedNotes);
   };
 

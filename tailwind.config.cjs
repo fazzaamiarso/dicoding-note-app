@@ -9,6 +9,7 @@ module.exports = {
         textPrimary: "#e4e5e4",
         textSecondary: "#aeafae",
         purple: "#ba87fc",
+        inputField: "#292929",
       },
     },
   },

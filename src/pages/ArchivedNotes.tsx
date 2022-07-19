@@ -1,3 +1,4 @@
+import EmptyStateShell from "../components/EmptyStateShell";
 import NotesCard from "../components/NotesCard";
 import { useNotesData } from "../utils/notes-context";
 
@@ -22,5 +23,9 @@ const ArchivedNotes = () => {
 export default ArchivedNotes;
 
 const EmptyState = () => {
-  return <p>Archive is empty.</p>;
+  return (
+    <EmptyStateShell>
+      <p className="text-lg ">Archive is empty!</p>
+    </EmptyStateShell>
+  );
 };

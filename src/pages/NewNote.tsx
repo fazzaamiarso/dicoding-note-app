@@ -75,7 +75,7 @@ const NewNote = () => {
                       value={title}
                       name="title"
                       onChange={handleTitleChange}
-                      className="rounded-md bg-[#2f2e2e] focus:ring-purple text-textPrimary"
+                      className="rounded-md bg-inputField focus:ring-purple text-textPrimary"
                     />
                     <span className="text-sm text-textSecondary self-end mt-1">
                       {titleCharLeft} characters left
@@ -90,7 +90,7 @@ const NewNote = () => {
                       value={body}
                       name="body"
                       onChange={(e) => setBody(e.target.value)}
-                      className="rounded-md bg-[#2f2e2e] focus:ring-purple text-textPrimary resize-y"
+                      className="rounded-md bg-inputField focus:ring-purple text-textPrimary resize-y"
                     />
                   </div>
                   <div className="pt-8 ml-auto space-x-4">
