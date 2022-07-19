@@ -72,6 +72,8 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
     </notesContext.Provider>
   );
 };
+
+
 const useNotes = () => {
   const ctx = useContext(notesContext);
   if (!ctx)
