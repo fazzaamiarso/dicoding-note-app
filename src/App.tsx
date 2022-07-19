@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { useNotesAction, useNotesData } from "./utils/notes-context";
 import { PlusCircleIcon } from "@heroicons/react/solid";
 import NewNoteButton from "./components/NewNoteButton";
